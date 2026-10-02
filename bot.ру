@@ -1,0 +1,15 @@
+import os from telegram import Update from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+TOKEN = os.getenv("BOT_TOKEN")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE): await update.message.reply_text( "🛒 Привет! Я SellerAI — помощник продавца.\n\n" "Отправь мне описание товара, и я помогу сделать красивое объявление." )
+async def create_ad(update: Update, context: ContextTypes.DEFAULT_TYPE): text = update.message.text
+answer = (
+    "✨ Ваше объявление:\n\n"
+    f"{text}\n\n"
+    "📦 Отличный вариант для покупки!\n"
+    "💬 Пишите, отвечу на вопросы."
+)
+
+await update.message.reply_text(answer)
+app = Application.builder().token(TOKEN).build()
+app.add_handler(CommandHandler("start", start)) app.add_handler(MessageHandler(filters.TEXT, create_ad))
+app.run_polling()
